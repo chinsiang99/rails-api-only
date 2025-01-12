@@ -1,4 +1,6 @@
 class BooksController < ApplicationController
+  rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+  rescue_from ActiveRecord::RecordNotFound, with: :not_found
   def index
     render json: Book.all
   end
@@ -20,6 +22,12 @@ class BooksController < ApplicationController
     Book.find(params[:id]).destroy!
 
     head :no_content
+
+    # below is for specific function
+    # rescue ActiveRecord::RecordNotDestroyed
+    #   render json: {}, status: :unprocessable_entity
+    # rescue ActiveRecord::RecordNotFound
+    #   render json: {}, status: :not_found
   end
 
   private
