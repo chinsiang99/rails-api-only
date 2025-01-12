@@ -16,7 +16,14 @@ Rails.application.routes.draw do
   # end
 
   # resources :books, only: [ :index, :show, :create, :update, :destroy ]
-  resources :books, only: [ :index, :create, :destroy ]
+  # resources :books, only: [ :index, :create, :destroy ]
+
+  namespace :api do
+    namespace :v1 do
+      # resources :books, only: [ :index, :show, :create, :update, :destroy ]
+      resources :books, only: [ :index, :create, :destroy ]
+    end
+  end
 
 
   # Defines the root path route ("/")
