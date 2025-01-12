@@ -6,6 +6,7 @@ class BooksController < ApplicationController
   def create
     # some logic here
     # book = Book.create(title: "Harry Potter 1", author: "Chin Siang")
+    # book = Book.new(title: params[:title]", author: params[:author])
     book = Book.new(book_params)
 
     if book.save
@@ -13,6 +14,12 @@ class BooksController < ApplicationController
     else
       render json: book.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    Book.find(params[:id]).destroy!
+
+    head :no_content
   end
 
   private
