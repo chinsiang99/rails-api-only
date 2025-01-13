@@ -1,5 +1,6 @@
 in order to generate specific migration, we can use
 > rails g migration add_author_to_books author:references
+> rails g migration remove_author_from_books author:string
 
 
 if we want to go into test console, we can use
