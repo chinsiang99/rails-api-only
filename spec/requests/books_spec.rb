@@ -19,6 +19,9 @@ require 'rails_helper'
 
 
 describe 'Books API', type: :request do
+  before(:each) do
+    Book.delete_all # Clears all book records before each test
+  end
   describe 'GET /api/v1/books' do
     it 'returns a list of books' do
       FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
