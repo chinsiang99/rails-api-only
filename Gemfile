@@ -44,6 +44,13 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # run "rspec" to unit test all the files
+  # run rails generate rspec:install to generate boilerplate configuration files
+  # run below script if it is on windows
+  # rails db:migrate RAILS_ENV=test
+  gem "rspec-rails"
+
+  # to mock data for unit test
+  gem "factory_bot_rails"
 end
-
-
