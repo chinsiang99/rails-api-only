@@ -66,6 +66,23 @@ describe 'Books API', type: :request do
       end
     end
 
+    describe 'DELETE /api/v1/books/:id' do
+      context 'if book is found' do
+        it 'should delete a book' do
+          FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
+          delete '/api/v1/books/1'
+          expect(response).to have_http_status(:no_content)
+        end
+      end
+
+      context 'if book is not found' do
+        it 'should return not found status' do
+          delete '/api/v1/books/3'
+          expect(response).to have_http_status(:not_found)
+        end
+      end
+    end
+
     # context 'with author missing' do
     #   it 'should return bad request status' do
     #     post '/api/v1/books', params: { book: { title: 'mock title' } }
