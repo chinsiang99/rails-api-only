@@ -4,7 +4,12 @@ module Api
       rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
       rescue_from ActiveRecord::RecordNotFound, with: :not_found
       def index
-        render json: Book.all
+        # render json: Book.all
+        books = Book.all
+
+        # Rails.logger.info "First book details: #{books[0].inspect} yoyoyo"
+
+        render json: BooksRepresenter.new(books).as_json()
       end
 
       def create
