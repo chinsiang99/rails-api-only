@@ -28,6 +28,27 @@ describe 'Books API', type: :request do
       expect(JSON.parse(response.body).size).to eq(2) # As we have two books created
     end
   end
+
+  describe 'POST /api/v1/books' do
+    context 'with valid parameters' do
+      it 'creates a new book and returns a successful response' do
+        expect {
+          post '/api/v1/books', params: { book: { title: 'mock title', author: 'mock author' } }
+      }.to change { Book.count }.from(0).to(1)
+
+        expect(response).to have_http_status(:created)
+        expect(JSON.parse(response.body)['title']).to eq('mock title')
+        expect(JSON.parse(response.body)['author']).to eq('mock author')
+      end
+    end
+    # it 'returns a list of books' do
+    #   FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
+    #   FactoryBot.create(:book, title: 'mock book title 2', author: 'mock author 2')
+    #   get '/api/v1/books'
+    #   expect(response).to have_http_status(:success)
+    #   expect(JSON.parse(response.body).size).to eq(2) # As we have two books created
+    # end
+  end
 end
 # describe 'POST #create' do
 #   context 'with valid parameters' do
