@@ -10,7 +10,8 @@ class BooksRepresenter
           title: book.title,
           author_first_name: book.author&.first_name.to_s, # use .to_s will turn nil into empty string
           author_last_name: book.author&.last_name.to_s, # we have &. to indicate if doesnt have author then it will return nil
-          author_name: "#{book.author&.first_name} #{book.author&.last_name}",
+          # author_name: "#{book.author&.first_name} #{book.author&.last_name}",
+          author_name: author_name(book),
           author_age: book.author&.age
         }
       end
@@ -19,4 +20,8 @@ class BooksRepresenter
     private
 
     attr_reader :books
+
+    def author_name(book)
+      "#{book.author&.first_name} #{book.author&.last_name}"
+    end
 end
