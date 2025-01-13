@@ -34,13 +34,45 @@ describe 'Books API', type: :request do
       it 'creates a new book and returns a successful response' do
         expect {
           post '/api/v1/books', params: { book: { title: 'mock title', author: 'mock author' } }
-      }.to change { Book.count }.from(0).to(1)
+        }.to change { Book.count }.from(0).to(1)
 
         expect(response).to have_http_status(:created)
         expect(JSON.parse(response.body)['title']).to eq('mock title')
         expect(JSON.parse(response.body)['author']).to eq('mock author')
       end
     end
+
+    context 'with title and author missing' do
+      it 'should return unprocessable entity status' do
+        post '/api/v1/books', params: { book: {} }
+
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
+    context 'with title missing' do
+      it 'should return unprocessable entity status' do
+        post '/api/v1/books', params: { book: { author: 'mock author' } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    context 'with author missing' do
+      it 'should return bad request status' do
+        post '/api/v1/books', params: { book: { title: 'mock title' } }
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+    end
+
+    # context 'with author missing' do
+    #   it 'should return bad request status' do
+    #     post '/api/v1/books', params: { book: { title: 'mock title' } }
+
+    #     expect(response).to have_http_status(:bad_request)
+    #   end
+    # end
     # it 'returns a list of books' do
     #   FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
     #   FactoryBot.create(:book, title: 'mock book title 2', author: 'mock author 2')
