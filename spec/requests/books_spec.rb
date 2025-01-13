@@ -73,7 +73,10 @@ describe 'Books API', type: :request do
       context 'if book is found' do
         it 'should delete a book' do
           book = FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
-          delete "/api/v1/books/#{book.id}"
+          expect {
+            delete "/api/v1/books/#{book.id}"
+          }.to change { Book.count }.from(1).to(0)
+
           expect(response).to have_http_status(:no_content)
         end
       end
