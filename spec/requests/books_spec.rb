@@ -31,7 +31,7 @@ describe 'Books API', type: :request do
       FactoryBot.create(:book, title: 'mock book title 2', author: FactoryBot.create(:author, first_name: 'mock author 2', last_name: 'last name 2', age: 13))
       get '/api/v1/books'
       expect(response).to have_http_status(:success)
-      expect(JSON.parse(response.body).size).to eq(2) # As we have two books created
+      expect(response_body.size).to eq(2) # As we have two books created
     end
   end
 
@@ -47,9 +47,9 @@ describe 'Books API', type: :request do
         #  .to change { Author.count }.from(0).to(1)
 
         expect(response).to have_http_status(:created)
-        expect(JSON.parse(response.body)['title']).to eq('mock title')
+        expect(response_body['title']).to eq('mock title')
         expect(Author.count).to eq(1)
-        expect(JSON.parse(response.body)).to eq({
+        expect(response_body).to eq({
           'id' => 1,
           'title' => 'mock title',
           'author_first_name' => 'mock first name', # use .to_s will turn nil into empty string
