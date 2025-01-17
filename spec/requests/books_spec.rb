@@ -49,7 +49,15 @@ describe 'Books API', type: :request do
         expect(response).to have_http_status(:created)
         expect(JSON.parse(response.body)['title']).to eq('mock title')
         expect(Author.count).to eq(1)
-        # expect(JSON.parse(response.body)['author']).to eq('mock author')
+        expect(JSON.parse(response.body)).to eq({
+          'id' => 1,
+          'title' => 'mock title',
+          'author_first_name' => 'mock first name', # use .to_s will turn nil into empty string
+          'author_last_name' => 'mock last name', # we have &. to indicate if doesnt have author then it will return nil
+          # author_name: "#{book.author&.first_name} #{book.author&.last_name}",
+          'author_name' => 'mock first name mock last name',
+          'author_age' => 13
+        })
       end
     end
 
