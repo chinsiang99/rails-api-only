@@ -5,3 +5,5 @@ in order to generate specific migration, we can use
 
 if we want to go into test console, we can use
 > rails console -e test
+
+> use rails db:migrate RAILS_ENV=test

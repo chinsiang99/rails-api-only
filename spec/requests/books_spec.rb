@@ -21,11 +21,14 @@ require 'rails_helper'
 describe 'Books API', type: :request do
   before(:each) do
     Book.delete_all # Clears all book records before each test
+    Author.delete_all # Clears all author records before each test
   end
   describe 'GET /api/v1/books' do
     it 'returns a list of books' do
-      FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
-      FactoryBot.create(:book, title: 'mock book title 2', author: 'mock author 2')
+      # FactoryBot.create(:book, title: 'mock book title', author: 'mock author')
+      # FactoryBot.create(:book, title: 'mock book title 2', author: 'mock author 2')
+      FactoryBot.create(:book, title: 'mock book title', author: FactoryBot.create(:author, first_name: 'mock author', last_name: 'last name', age: 13))
+      FactoryBot.create(:book, title: 'mock book title 2', author: FactoryBot.create(:author, first_name: 'mock author 2', last_name: 'last name 2', age: 13))
       get '/api/v1/books'
       expect(response).to have_http_status(:success)
       expect(JSON.parse(response.body).size).to eq(2) # As we have two books created
@@ -36,12 +39,17 @@ describe 'Books API', type: :request do
     context 'with valid parameters' do
       it 'creates a new book and returns a successful response' do
         expect {
-          post '/api/v1/books', params: { book: { title: 'mock title', author: 'mock author' } }
+          post '/api/v1/books', params: {
+            book: { title: 'mock title' },
+            author: { first_name: 'mock first name', last_name: 'mock last name', age: 13 }
+          }
         }.to change { Book.count }.from(0).to(1)
+        #  .to change { Author.count }.from(0).to(1)
 
         expect(response).to have_http_status(:created)
         expect(JSON.parse(response.body)['title']).to eq('mock title')
-        expect(JSON.parse(response.body)['author']).to eq('mock author')
+        expect(Author.count).to eq(1)
+        # expect(JSON.parse(response.body)['author']).to eq('mock author')
       end
     end
 
@@ -57,7 +65,7 @@ describe 'Books API', type: :request do
       it 'should return unprocessable entity status' do
         post '/api/v1/books', params: { book: { author: 'mock author' } }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
       end
     end
 
@@ -65,7 +73,7 @@ describe 'Books API', type: :request do
       it 'should return bad request status' do
         post '/api/v1/books', params: { book: { title: 'mock title' } }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:bad_request)
       end
     end
 
