@@ -33,6 +33,16 @@ describe 'Books API', type: :request do
       expect(response).to have_http_status(:success)
       expect(response_body.size).to eq(2) # As we have two books created
     end
+
+    context 'if there is pagination' do
+      it 'should return list of books based on the pagination configuration' do
+        FactoryBot.create(:book, title: 'mock book title', author: FactoryBot.create(:author, first_name: 'mock author', last_name: 'last name', age: 13))
+        FactoryBot.create(:book, title: 'mock book title 2', author: FactoryBot.create(:author, first_name: 'mock author 2', last_name: 'last name 2', age: 13))
+        get '/api/v1/books', params: { limit: 1 }
+        expect(response).to have_http_status(:success)
+        expect(response_body.size).to eq(1) # As we only retrieve 1 based on limit
+      end
+    end
   end
 
   describe 'POST /api/v1/books' do
