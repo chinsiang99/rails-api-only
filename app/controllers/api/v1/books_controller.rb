@@ -1,12 +1,16 @@
 module Api
   module V1
     class BooksController < ApplicationController
+      MAX_PAGINATION_LIMIT = 100
       # rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
       # rescue_from ActiveRecord::RecordNotFound, with: :not_found
       def index
         # render json: Book.all
         # books = Book.all
-        books = Book.limit(params[:limit]).offset(params[:offset])
+
+        # Rails.logger.info limit
+        puts limit
+        books = Book.limit(limit).offset(params[:offset])
 
         # Rails.logger.info "First book details: #{books[0].inspect} yoyoyo"
 
@@ -46,6 +50,13 @@ module Api
       end
 
       private
+
+      def limit
+        [
+          params.fetch(:limit, MAX_PAGINATION_LIMIT).to_i,
+          MAX_PAGINATION_LIMIT
+        ].min
+      end
 
       def author_params
         params.require(:author).permit(:first_name, :last_name, :age)

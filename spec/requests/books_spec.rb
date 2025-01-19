@@ -43,6 +43,15 @@ describe 'Books API', type: :request do
         expect(response_body.size).to eq(1) # As we only retrieve 1 based on limit
       end
     end
+
+    context 'if there is pagination and it exceeds maximum limit, it will always show 100 limit' do
+      it 'should return list of books based on the pagination configuration' do
+        FactoryBot.create(:book, title: 'mock book title', author: FactoryBot.create(:author, first_name: 'mock author', last_name: 'last name', age: 13))
+        FactoryBot.create(:book, title: 'mock book title 2', author: FactoryBot.create(:author, first_name: 'mock author 2', last_name: 'last name 2', age: 13))
+        expect(Book).to receive(:limit).with(100).and_call_original
+        get '/api/v1/books', params: { limit: 999 }
+      end
+    end
   end
 
   describe 'POST /api/v1/books' do
