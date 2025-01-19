@@ -1,11 +1,12 @@
 module Api
   module V1
     class BooksController < ApplicationController
-      rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
-      rescue_from ActiveRecord::RecordNotFound, with: :not_found
+      # rescue_from ActiveRecord::RecordNotDestroyed, with: :not_destroyed
+      # rescue_from ActiveRecord::RecordNotFound, with: :not_found
       def index
         # render json: Book.all
-        books = Book.all
+        # books = Book.all
+        books = Book.limit(params[:limit]).offset(params[:offset])
 
         # Rails.logger.info "First book details: #{books[0].inspect} yoyoyo"
 
